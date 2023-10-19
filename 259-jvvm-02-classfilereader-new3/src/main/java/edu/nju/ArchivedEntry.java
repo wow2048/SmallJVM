@@ -1,8 +1,9 @@
 package edu.nju;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.File;
 import java.io.IOException;
-import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -19,13 +20,9 @@ public class ArchivedEntry extends Entry{
         File dir = new File(classpath);
         String absoluteDir = dir.getAbsolutePath();
         ZipFile zipfile = new ZipFile(absoluteDir);
-        Enumeration<? extends ZipEntry> entries = zipfile.entries();
-        while(entries.hasMoreElements()){
-            ZipEntry ze = entries.nextElement();
-            String zeName = IOUtil.transform(ze.getName());
-            if(zeName.equals(className)){
-                return IOUtil.readFileByBytes(zipfile.getInputStream(ze));
-            }
+        ZipEntry entry = zipfile.getEntry(StringUtils.replace(className, FILE_SEPARATOR, "/"));
+        if (entry != null) {
+            return IOUtil.readFileByBytes(zipfile.getInputStream(entry));
         }
         return null;
     }

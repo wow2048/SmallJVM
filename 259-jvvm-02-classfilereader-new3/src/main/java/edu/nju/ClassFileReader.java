@@ -20,39 +20,37 @@ public class ClassFileReader {
          * case 3 archived file
          * case 4 classpath with path separator
          */
-        if(classpath.contains(PATH_SEPARATOR)){
+        if (classpath.contains(PATH_SEPARATOR)) {
             return new CompositeEntry(classpath);
-        }
-        else if(classpath.contains("*")){
+        } else if (classpath.contains("*")) {
             return new WildEntry(classpath);
-        }
-        else if(classpath.contains("zip")||classpath.contains("ZIP")
-                    ||classpath.contains("jar")||classpath.contains("JAR")){
+        } else if (classpath.contains("zip") || classpath.contains("ZIP")
+                || classpath.contains("jar") || classpath.contains("JAR")) {
             return new ArchivedEntry(classpath);
-        }
-        else{
+        } else {
             return new DirEntry(classpath);
         }
     }
 
     /**
-     *
      * @param classpath where to find target class
      * @param className format: /package/.../class
      * @return content of classfile
      */
-    public static byte[] readClassFile(String classpath,String className) throws ClassNotFoundException{
-        if(classpath == null)throw new ClassNotFoundException();
+    public static byte[] readClassFile(String classpath, String className) throws ClassNotFoundException {
+        if (classpath == null || className == null) throw new ClassNotFoundException();
         className = IOUtil.transform(className);
         className += ".class";
+        classpath = IOUtil.transform(classpath);
         bootStrapReader = chooseEntryType(classpath);
-        byte[] ret = new byte[0];
+        byte[] ret;
         try {
             ret = bootStrapReader.readClassFile(className);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
+            return null;
         }
-        if (ret==null)throw new ClassNotFoundException();
+        if (ret == null) throw new ClassNotFoundException();
         return ret;
     }
 }
