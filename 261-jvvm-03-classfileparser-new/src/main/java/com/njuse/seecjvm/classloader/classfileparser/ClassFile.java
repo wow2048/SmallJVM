@@ -43,7 +43,8 @@ public class ClassFile {
         }
         this.minorVersion = in.getShort();
         this.majorVersion = in.getShort();
-        /** todo set this.thisClass
+        /*
+         *  todo set this.thisClass
          *  todo set this.superClass
          * Add some codes here.
          * You should complete the missing code of ClassInfo and UTF8Info
@@ -51,15 +52,14 @@ public class ClassFile {
          */
         parseConstantPool(classfile);
         this.accessFlags = in.getShort();
-
-
-        /**
+        this.thisClass = in.getShort();
+        this.superClass = in.getShort();
+        /*
          * todo call parseinterfaces
          * Add some codes here.
          * You should read thisClass superClass interfaceCount and then parse interfaces correctly
          */
-
-
+        parseInterfaces();
         parseFields();
         parseMethods();
         parseAttributes();
@@ -96,7 +96,11 @@ public class ClassFile {
         /**
          * Add some codes here.
          */
-
+        this.interfacesCount = in.getShort();
+        this.interfaces = new short[0xFFFF & this.interfacesCount];
+        for (int i = 0; i < this.interfacesCount; i++) {
+            this.interfaces[i] = in.getShort();
+        }
     }
 
     private void parseConstantPool(byte[] classfile) {

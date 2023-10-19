@@ -12,6 +12,9 @@ public class Field extends ClassMember {
         /**
          * tips: refer to constructor of Method
          */
-
+        this.clazz = clazz;
+        accessFlags = info.getAccessFlags();
+        name = info.getName();
+        descriptor = info.getDescriptor();
     }
 }

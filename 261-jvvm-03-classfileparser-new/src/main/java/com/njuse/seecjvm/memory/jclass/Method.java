@@ -28,6 +28,7 @@ public class Method extends ClassMember {
         }
         argc = calculateArgcFromDescriptor(descriptor);
     }
+
     //todo calculateArgcFromDescriptor
     private int calculateArgcFromDescriptor(String descriptor) {
         /**
@@ -38,7 +39,58 @@ public class Method extends ClassMember {
          *
          * Beware of long and double type
          */
+        int res = 0;
+        String args = descriptor.substring(descriptor.indexOf("(") + 1, descriptor.indexOf(")"));
+        int index = 0;
+        while (index < args.length()) {
+            char ch = args.charAt(index);
+            switch (ch) {
+                case '[':
+                    index++;
+                    while (args.charAt(index) == '[') {
+                        index++;
+                    }
+                    if (isBasicType(args.charAt(index))) {
+                        res++;
+                        index++;
+                    } else if (args.charAt(index) == 'L') {
+                        res++;
+                        index++;
+                        while (args.charAt(index) != ';') {
+                            index++;
+                        }
+                        index++;
+                    }
+                    break;
+                case 'B':
+                case 'C':
+                case 'F':
+                case 'I':
+                case 'S':
+                case 'Z':
+                    res += 1;
+                    index++;
+                    break;
+                case 'J':
+                case 'D':
+                    res += 2;
+                    index++;
+                    break;
+                case 'L':
+                    res += 1;
+                    index++;
+                    while (args.charAt(index) != ';') {
+                        index++;
+                    }
+                    index++;
+                    break;
+            }
+        }
 
-        return 0;
+        return res;
+    }
+
+    private boolean isBasicType(char ch) {
+        return ch == 'B' || ch == 'C' || ch == 'F' || ch == 'I' || ch == 'S' || ch == 'Z' || ch == 'J' || ch == 'D';
     }
 }

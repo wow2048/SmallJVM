@@ -43,7 +43,8 @@ public class ConstantPoolInfo {
                  * todo complete the missing code of ClassInfo
                  * Add some codes here.
                  */
-                ret = null;
+                ret = new ClassInfo(constantPool, in.getU2());
+                bytesRead += 2;
                 break;
             case FIELD_REF: {
                 ret = new FieldrefInfo(constantPool, in.getU2(), in.getU2());
@@ -100,7 +101,9 @@ public class ConstantPoolInfo {
                  * todo complete the missing code of UTF8Info
                  * Add some codes here.
                  */
-                ret = null;
+                Pair<UTF8Info, Integer> UTF8InfoInt = UTF8Info.getInstance(constantPool, classfile, ofs);
+                ret = UTF8InfoInt.getKey();
+                bytesRead += UTF8InfoInt.getValue();
                 break;
             }
 
@@ -135,6 +138,7 @@ public class ConstantPoolInfo {
         byte b4 = in.getByteBuffer().get();
         return new byte[]{b1, b2, b3, b4};
     }
+
 
     public int getEntryLength() {
         return 1;
