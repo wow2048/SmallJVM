@@ -1,6 +1,11 @@
 package com.njuse.seecjvm.classloader.classfilereader;
 
-import com.njuse.seecjvm.classloader.classfilereader.classpath.*;
+import com.njuse.seecjvm.classloader.classfilereader.classpath.ArchivedEntry;
+import com.njuse.seecjvm.classloader.classfilereader.classpath.CompositeEntry;
+import com.njuse.seecjvm.classloader.classfilereader.classpath.DirEntry;
+import com.njuse.seecjvm.classloader.classfilereader.classpath.Entry;
+import com.njuse.seecjvm.classloader.classfilereader.classpath.EntryType;
+import com.njuse.seecjvm.classloader.classfilereader.classpath.WildEntry;
 import com.njuse.seecjvm.util.PathUtil;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -76,6 +81,24 @@ public class ClassFileReader {
          *
          * Return the result once you read it.
          */
+        int value = (privilege == null) ? EntryType.USER_ENTRY : privilege.getValue();
+        byte[] data;
+        if (value >= EntryType.BOOT_ENTRY) {
+            if ((data = bootClasspath.readClass(realClassName)) != null) {
+                return Pair.of(data, EntryType.BOOT_ENTRY);
+            }
+        }
+        if (value >= EntryType.EXT_ENTRY) {
+            if ((data = extClasspath.readClass(realClassName)) != null) {
+                return Pair.of(data, EntryType.EXT_ENTRY);
+            }
+        }
+        if (value >= EntryType.USER_ENTRY) {
+            if ((data = userClasspath.readClass(realClassName)) != null) {
+                return Pair.of(data, EntryType.USER_ENTRY);
+            }
+        }
+
         throw new ClassNotFoundException();
     }
 }

@@ -14,7 +14,7 @@ public abstract class SymRef implements Constant {
     public String className;    //format : java/lang/Object
     public JClass clazz;
 
-    public void resolveClassRef() throws ClassNotFoundException {
+    public void resolveClassRef() throws ClassNotFoundException, IllegalAccessException {
         //todo
         /**
          * Add some codes here.
@@ -33,5 +33,12 @@ public abstract class SymRef implements Constant {
          * Check the permission and throw IllegalAccessException
          * Don't forget to set the value of clazz with loaded class
          */
+        JClass jClass = runtimeConstantPool.getClazz();
+        ClassLoader classLoader = ClassLoader.getInstance();
+        JClass callee = classLoader.loadClass(className, jClass.getLoadEntryType());
+        if (!callee.isAccessibleTo(jClass)) {
+            throw new IllegalAccessException();
+        }
+        this.clazz = callee;
     }
 }

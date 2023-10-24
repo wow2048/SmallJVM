@@ -9,6 +9,7 @@ import com.njuse.seecjvm.memory.jclass.runtimeConstantPool.RuntimeConstantPool;
 import com.njuse.seecjvm.runtime.Vars;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 
 @Getter
 @Setter
@@ -81,6 +82,6 @@ public class JClass {
          * Add some codes here.
          * Refer to jvm specification 5.4.4
          */
-        return false;
+        return StringUtils.equals(getPackageName(), caller.getPackageName()) || isPublic();
     }
 }
