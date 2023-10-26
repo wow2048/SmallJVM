@@ -1,6 +1,8 @@
 package com.njuse.seecjvm.instructions.store;
 
+import com.njuse.seecjvm.runtime.OperandStack;
 import com.njuse.seecjvm.runtime.StackFrame;
+import com.njuse.seecjvm.runtime.Vars;
 
 public class ISTORE_N extends STORE_N {
     public ISTORE_N(int index) {
@@ -14,6 +16,9 @@ public class ISTORE_N extends STORE_N {
      */
     @Override
     public void execute(StackFrame frame) {
-
+        OperandStack stack = frame.getOperandStack();
+        int value = stack.popInt();
+        Vars localVars = frame.getLocalVars();
+        localVars.setInt(index, value);
     }
 }

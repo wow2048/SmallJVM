@@ -28,7 +28,9 @@ public class OperandStack {
      * @param value 变量的值
      */
     public void pushInt(int value) {
-
+        if (top >= maxStackSize) throw new StackOverflowError();
+        slots[top].setValue(value);
+        top++;
     }
 
     /**
@@ -37,7 +39,11 @@ public class OperandStack {
      * @return 返回这个int的值
      */
     public int popInt() {
-        return 23333333;
+        top--;
+        if (top < 0) throw new EmptyStackException();
+        int ret = slots[top].getValue();
+        slots[top] = new Slot();
+        return ret;
     }
 
     public void pushFloat(float value) {
@@ -60,7 +66,12 @@ public class OperandStack {
      * @param value 变量的值
      */
     public void pushLong(long value) {
-
+        if (top >= maxStackSize) throw new StackOverflowError();
+        slots[top].setValue((int) value);
+        top++;
+        if (top >= maxStackSize) throw new StackOverflowError();
+        slots[top].setValue((int) (value >> 32));
+        top++;
     }
 
     /**
@@ -69,7 +80,13 @@ public class OperandStack {
      * @return 返回这个long的值
      */
     public long popLong() {
-        return 233333L;
+        top--;
+        if (top < 0) throw new EmptyStackException();
+        int high = slots[top].getValue();
+        top--;
+        if (top < 0) throw new EmptyStackException();
+        int low = slots[top].getValue();
+        return (((long) high) << 32) | ((long) low & 0x0ffffffffL);
     }
 
     public void pushDouble(double value) {
@@ -82,7 +99,7 @@ public class OperandStack {
      * @return 返回这个double的值
      */
     public double popDouble() {
-        return 2333333.0;
+        return Double.longBitsToDouble(popLong());
     }
 
     public void pushObjectRef(JObject ref) {

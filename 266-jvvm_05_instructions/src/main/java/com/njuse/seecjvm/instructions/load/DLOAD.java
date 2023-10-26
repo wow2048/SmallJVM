@@ -1,7 +1,9 @@
 package com.njuse.seecjvm.instructions.load;
 
 import com.njuse.seecjvm.instructions.base.Index8Instruction;
+import com.njuse.seecjvm.runtime.OperandStack;
 import com.njuse.seecjvm.runtime.StackFrame;
+import com.njuse.seecjvm.runtime.Vars;
 
 public class DLOAD extends Index8Instruction {
 
@@ -11,6 +13,9 @@ public class DLOAD extends Index8Instruction {
      */
     @Override
     public void execute(StackFrame frame) {
-
+        Vars localVars = frame.getLocalVars();
+        double value = localVars.getDouble(index);
+        OperandStack stack = frame.getOperandStack();
+        stack.pushDouble(value);
     }
 }

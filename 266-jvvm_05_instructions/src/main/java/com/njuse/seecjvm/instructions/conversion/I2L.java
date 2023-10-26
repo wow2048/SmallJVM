@@ -1,6 +1,7 @@
 package com.njuse.seecjvm.instructions.conversion;
 
 import com.njuse.seecjvm.instructions.base.NoOperandsInstruction;
+import com.njuse.seecjvm.runtime.OperandStack;
 import com.njuse.seecjvm.runtime.StackFrame;
 
 public class I2L extends NoOperandsInstruction {
@@ -11,6 +12,8 @@ public class I2L extends NoOperandsInstruction {
      */
     @Override
     public void execute(StackFrame frame) {
-
+        OperandStack stack = frame.getOperandStack();
+        int value = stack.popInt();
+        stack.pushLong(value);
     }
 }

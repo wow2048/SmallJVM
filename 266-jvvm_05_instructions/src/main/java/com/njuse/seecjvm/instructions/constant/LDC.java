@@ -24,11 +24,13 @@ public class LDC extends Index8Instruction {
         Constant constant = frame.getMethod().getClazz().getRuntimeConstantPool().getConstant(index);
         if (constant instanceof IntWrapper) {
             //TODO 如果这个元素是IntWrapper， insert your code here
-
+            IntWrapper intWrapper = (IntWrapper) constant;
+            stack.pushInt(intWrapper.getValue());
         }
         else if (constant instanceof FloatWrapper) {
             //TODO 如果这个元素是FloatWrapper， insert your code here
-
+            FloatWrapper floatWrapper = (FloatWrapper) constant;
+            stack.pushFloat(floatWrapper.getValue());
         }
 
         else throw new ClassFormatError();

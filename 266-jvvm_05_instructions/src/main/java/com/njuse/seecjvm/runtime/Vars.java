@@ -44,7 +44,9 @@ public class Vars {
      * @param value 变量的值
      */
     public void setLong(int index, long value) {
-
+        if (index < 0 || index + 1 >= maxSize) throw new IndexOutOfBoundsException();
+        varSlots[index].setValue((int) value);
+        varSlots[index + 1].setValue((int) (value >> 32));
     }
 
     /**
@@ -53,7 +55,10 @@ public class Vars {
      * @return 变量的值
      */
     public long getLong(int index) {
-        return 233333L;
+        if (index < 0 || index + 1 >= maxSize) throw new IndexOutOfBoundsException();
+        int low = varSlots[index].getValue();
+        int high = varSlots[index + 1].getValue();
+        return (((long) high) << 32) | ((long) low & 0x0ffffffffL);
     }
 
     public void setDouble(int index, double value) {

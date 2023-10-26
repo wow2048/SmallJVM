@@ -1,6 +1,8 @@
 package com.njuse.seecjvm.instructions.load;
 
+import com.njuse.seecjvm.runtime.OperandStack;
 import com.njuse.seecjvm.runtime.StackFrame;
+import com.njuse.seecjvm.runtime.Vars;
 
 public class ILOAD_N extends LOAD_N {
     public ILOAD_N(int index) {
@@ -13,6 +15,9 @@ public class ILOAD_N extends LOAD_N {
      */
     @Override
     public void execute(StackFrame frame) {
-
+        Vars localVars = frame.getLocalVars();
+        int value = localVars.getInt(index);
+        OperandStack stack = frame.getOperandStack();
+        stack.pushInt(value);
     }
 }
