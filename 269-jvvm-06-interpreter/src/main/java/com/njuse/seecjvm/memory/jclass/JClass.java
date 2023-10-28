@@ -8,6 +8,7 @@ import com.njuse.seecjvm.classloader.classfileparser.constantpool.ConstantPool;
 import com.njuse.seecjvm.classloader.classfilereader.classpath.EntryType;
 import com.njuse.seecjvm.memory.jclass.runtimeConstantPool.RuntimeConstantPool;
 import com.njuse.seecjvm.runtime.JThread;
+import com.njuse.seecjvm.runtime.StackFrame;
 import com.njuse.seecjvm.runtime.Vars;
 import com.njuse.seecjvm.runtime.struct.NonArrayObject;
 import lombok.Getter;
@@ -149,10 +150,21 @@ public class JClass {
      * 这个方法初始化了这个类的静态部分
      */
     public void initClass(JThread thread, JClass clazz) {
-
+        initStart(clazz);
+        Method method = clazz.getMethodInClass("<clinit>", "()V", true);
+        if (method != null) {
+            StackFrame frame = new StackFrame(thread, method, method.getMaxStack(), method.getMaxLocal());
+            thread.pushFrame(frame);
+        }
+        if (clazz.initState == InitState.SUCCESS) {
+            return;
+        }
+        JClass superClass = clazz.superClass;
+        if (superClass != null && superClass.initState == InitState.PREPARED) {
+            initClass(thread, superClass);
+        }
+        initSucceed(clazz);
     }
-
-
 
     /**
      * search method in class and its superclass
@@ -171,7 +183,6 @@ public class JClass {
         }
         return null;
     }
-
 
 
     public Method getMainMethod() {

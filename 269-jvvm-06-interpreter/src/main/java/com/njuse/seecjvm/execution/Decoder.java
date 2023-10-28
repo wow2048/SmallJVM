@@ -2,17 +2,27 @@ package com.njuse.seecjvm.execution;
 
 import com.njuse.seecjvm.instructions.base.Instruction;
 import com.njuse.seecjvm.instructions.base.OpCode;
-import com.njuse.seecjvm.instructions.constant.*;
+import com.njuse.seecjvm.instructions.constant.ACONST_NULL;
+import com.njuse.seecjvm.instructions.constant.BIPUSH;
+import com.njuse.seecjvm.instructions.constant.ICONST_N;
+import com.njuse.seecjvm.instructions.constant.LDC;
+import com.njuse.seecjvm.instructions.constant.NOP;
+import com.njuse.seecjvm.instructions.constant.SIPUSH;
 import com.njuse.seecjvm.instructions.control.GOTO;
 import com.njuse.seecjvm.instructions.control.IRETURN;
 import com.njuse.seecjvm.instructions.control.RETURN;
 import com.njuse.seecjvm.instructions.invoke.INVOKE_INTERFACE;
 import com.njuse.seecjvm.instructions.invoke.INVOKE_SPECIAL;
+import com.njuse.seecjvm.instructions.invoke.INVOKE_STATIC;
 import com.njuse.seecjvm.instructions.invoke.INVOKE_VIRTUAL;
 import com.njuse.seecjvm.instructions.load.ALOAD_N;
 import com.njuse.seecjvm.instructions.load.ILOAD;
 import com.njuse.seecjvm.instructions.load.ILOAD_N;
-import com.njuse.seecjvm.instructions.references.*;
+import com.njuse.seecjvm.instructions.references.GETFIELD;
+import com.njuse.seecjvm.instructions.references.GETSTATIC;
+import com.njuse.seecjvm.instructions.references.NEW;
+import com.njuse.seecjvm.instructions.references.PUTFIELD;
+import com.njuse.seecjvm.instructions.references.PUTSTATIC;
 import com.njuse.seecjvm.instructions.stack.DUP;
 import com.njuse.seecjvm.instructions.stack.POP;
 import com.njuse.seecjvm.instructions.store.ASTORE;
@@ -94,7 +104,7 @@ public class Decoder {
         opMap.put(OpCode.INVOKEVIRTUAL, new INVOKE_VIRTUAL());
         opMap.put(OpCode.INVOKESPECIAL, new INVOKE_SPECIAL());
         //TODO: 插入 invoke static
-
+        opMap.put(OpCode.INVOKESTATIC, new INVOKE_STATIC());
         opMap.put(OpCode.INVOKEINTERFACE, new INVOKE_INTERFACE());
         opMap.put(OpCode.NEW_, new NEW());
 
