@@ -1,2 +1,2 @@
 # SmallJVM
-2021春-JVM
+2021春-SmallJVM
